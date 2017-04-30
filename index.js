@@ -19,7 +19,6 @@ const mongoOptions = {
   server: { ssl: true, socketOptions: { keepAlive: 1 } },
   replSet: { ssl: true, socketOptions: { keepAlive: 1 } },
 };
-
 mongoose.connect(mongoUri, mongoOptions);
 mongoose.connection.on('error', () => {
   throw new Error(`unable to connect to database: ${mongoUri}`);
