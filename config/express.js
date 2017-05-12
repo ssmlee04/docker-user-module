@@ -10,6 +10,7 @@ import expressWinston from 'express-winston';
 import expressValidation from 'express-validation';
 import helmet from 'helmet';
 import passport from 'passport';
+import winston from 'winston';
 import winstonInstance from './winston';
 import routes from '../server/routes/index.route';
 import config from './config';
@@ -18,7 +19,13 @@ import APIError from '../server/helpers/APIError';
 const app = express();
 
 if (config.env === 'development') {
-  app.use(logger('dev'));
+  winston.stream = {
+    write: (message, encoding) => { // eslint-disable-line no-unused-vars
+      winston.info(message);
+    }
+  };
+
+  app.use(logger('dev', { stream: winston.stream }));
 }
 
 // parse body params and attache them to req.body
@@ -49,6 +56,7 @@ if (config.env === 'development') {
   //   colorStatus: true // Color the status code (default green, 3XX cyan, 4XX yellow, 5XX red).
   // }));
 }
+
 
 // mount all routes on /api path
 app.use('/api', routes);
