@@ -41,6 +41,7 @@
     "boilerplate"
   ],
   "dependencies": {
+    "array-equal": "1.0.0",
     "bluebird": "3.4.6",
     "body-parser": "1.15.2",
     "compression": "1.6.2",
@@ -56,9 +57,16 @@
     "http-status": "^0.2.0",
     "joi": "10.0.6",
     "jsonwebtoken": "7.1.9",
+    "lodash": "^4.17.4",
     "method-override": "^2.3.5",
     "mongoose": "4.7.4",
     "morgan": "1.7.0",
+    "passport": "^0.3.2",
+    "passport-facebook-token": "^3.3.0",
+    "passport-local": "^1.0.0",
+    "randomstring": "^1.1.5",
+    "should": "11.2.1",
+    "validator": "7.0.0",
     "winston": "2.3.0"
   },
   "devDependencies": {

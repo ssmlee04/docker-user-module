@@ -27,12 +27,9 @@ function get(req, res) {
  * @returns {User}
  */
 function create(req, res, next) {
-  const user = new User({
-    username: req.body.username,
-    mobileNumber: req.body.mobileNumber
-  });
+  const info = req.body;
 
-  user.save()
+  User.insert(info)
     .then(savedUser => res.json(savedUser))
     .catch(e => next(e));
 }

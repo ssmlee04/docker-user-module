@@ -1,11 +1,11 @@
 import mongoose from 'mongoose';
-import util from 'util';
+// import util from 'util';
 
 // config should be imported before importing any other file
 import config from './config/config';
 import app from './config/express';
 
-const debug = require('debug')('express-mongoose-es6-rest-api:index');
+// const debug = require('debug')('express-mongoose-es6-rest-api:index');
 
 // make bluebird default Promise
 Promise = require('bluebird'); // eslint-disable-line no-global-assign
@@ -25,10 +25,8 @@ mongoose.connection.on('error', () => {
 });
 
 // print mongoose logs in dev env
-if (config.MONGOOSE_DEBUG) {
-  mongoose.set('debug', (collectionName, method, query, doc) => {
-    debug(`${collectionName}.${method}`, util.inspect(query, false, 20), doc);
-  });
+if (config.mongooseDebug) {
+  mongoose.set('debug', true);
 }
 
 // module.parent check is required to support mocha watch
