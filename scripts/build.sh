@@ -25,7 +25,7 @@ fi
 CODE_DIR=$(cd $SCRIPT_DIR/..; pwd)
 echo $CODE_DIR
 
-REPO=${GROUP}/$(basename docker-user-module);
+REPO=${GROUP}/${REPO_NAME};
 echo $REPO
 
 $DOCKER_CMD build -t ${REPO}:${COMMIT} .

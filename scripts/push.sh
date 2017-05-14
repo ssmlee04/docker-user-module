@@ -4,6 +4,9 @@ set -ev
 echo $BRANCH
 echo $GIT_TAG_NAME
 
+# REPO=${GROUP}/${REPO_NAME};
+# echo $REPO
+
 if [[ -z "$GROUP" ]] ; then
     echo "Cannot find GROUP env var"
     exit 1
@@ -33,8 +36,9 @@ tag_and_push_all() {
     else
         TAG=$1
     fi
-    DOCKER_REPO=${GROUP}/${REPO}
+    DOCKER_REPO=${GROUP}/${REPO_NAME}
     echo $DOCKER_REPO
+    echo $TAG
 
     if [[ "$COMMIT" != "$TAG" ]]; then
         docker tag ${DOCKER_REPO}:${COMMIT} ${DOCKER_REPO}:${TAG}
@@ -43,7 +47,8 @@ tag_and_push_all() {
 }
 
 # Push snapshots whenever possible
-tag_and_push_all ${BRANCH}-${COMMIT:0:8}
+BRANCH_TRIMMED=${BRANCH//[\/]/-}
+tag_and_push_all ${BRANCH_TRIMMED}-${COMMIT:0:8}
 
 # Push tag and latest when tagged
 # if [ "$BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
