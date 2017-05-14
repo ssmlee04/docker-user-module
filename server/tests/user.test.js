@@ -138,4 +138,4 @@ describe('## User APIs', () => {
       done();
     });
   });
-}).timeout(2000);
+});

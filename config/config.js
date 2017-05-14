@@ -23,7 +23,9 @@ const envVarsSchema = Joi.object({
   MONGO_HOST: Joi.string().required()
     .description('Mongo DB host url'),
   MONGO_PORT: Joi.number()
-    .default(27017)
+    .default(27017),
+  MONGO_IF_REPLICA: Joi.boolean()
+    .default(false),
 }).unknown()
   .required();
 
@@ -44,6 +46,7 @@ const config = {
   mongo: {
     host: envVars.NODE_ENV === 'test' ? envVars.MONGO_HOST.replace('-dev', '-test') : envVars.MONGO_HOST,
     port: envVars.MONGO_PORT,
+    ifOptions: envVars.MONGO_IF_REPLICA,
   }
 };
 

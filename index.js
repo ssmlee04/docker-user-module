@@ -18,7 +18,13 @@ const mongoOptions = {
   server: { ssl: true, socketOptions: { keepAlive: 1 } },
   replSet: { ssl: true, socketOptions: { keepAlive: 1 } },
 };
-mongoose.connect(mongoUri, mongoOptions);
+
+if (config.mongo.ifOptions) {
+  mongoose.connect(mongoUri, mongoOptions);
+} else {
+  mongoose.connect(mongoUri);
+}
+
 mongoose.connection.on('error', () => {
   throw new Error(`unable to connect to database: ${mongoUri}`);
 });
