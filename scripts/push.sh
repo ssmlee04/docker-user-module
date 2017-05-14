@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
 set -ev
+echo $BRANCH
+echo $GIT_TAG_NAME
 
 if [[ -z "$GROUP" ]] ; then
     echo "Cannot find GROUP env var"
@@ -11,11 +13,6 @@ if [[ -z "$COMMIT" ]] ; then
     echo "Cannot find COMMIT env var"
     exit 1
 fi
-
-GIT_BRANCH=$(git rev-parse --symbolic-full-name --abbrev-ref HEAD)
-GIT_TAG=$(git describe --exact-match --tags 2> /dev/null)
-echo $GIT_BRANCH
-echo $GIT_TAG
 
 push() {
     DOCKER_PUSH=1;
@@ -46,11 +43,11 @@ tag_and_push_all() {
 }
 
 # Push snapshots whenever possible
-tag_and_push_all ${GIT_BRANCH}-${COMMIT:0:8}
+tag_and_push_all ${BRANCH}-${COMMIT:0:8}
 
 # Push tag and latest when tagged
-# if [ "$GIT_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
-if [ -n "$GIT_TAG" ]; then
-    tag_and_push_all ${GIT_TAG}
+# if [ "$BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+if [ -n "$GIT_TAG_NAME" ]; then
+    tag_and_push_all ${GIT_TAG_NAME}
     tag_and_push_all latest
 fi;
