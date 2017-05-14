@@ -3,20 +3,20 @@ language: node_js
 node_js:
   - "7.6"
 
-services:
-  - mongodb
-
 env:
   global:
-    - secure: H/Nj/b0AsKa4cLfTfvbXm1PVPDDM5egnEmx734Du8TnA6Afxgs79YCs2KaTcDOesmSybMmNavYqHtSgoB7MeGtsEnO+IhFV84wPkxoIzjfJF6YaPRl3eItfChXOFQd/hNhOzxphs49Dq5bX5SYb8Nb+9mwy36nMBVgK3JH0v06etJJIAcs+oYbV3EzhXJxi4G35cwxM5OPzGKsmRQIXt9TABo0fg3UgsD79AJV3r7sN++glFeuzsch0Jl1/aWoAkxS4xhxpPYg/a01SWZQx0EXo29C42QOd7inEFdSwGBszU1V3O/V9peqw/C7vB9QfJ4oipI/zsW40dSzuMDd0gFw==
+    - secure: AYUfnScZAf3T5qL8XYQq4Fkhq+KPqrizGN/2/L3Sw/K9oEeaSsnBVjwiM1NOln4CPggVhojS0hccM4c9DMN/tW2IcZnln2y5KyanUpAwhT399EE4OYAv8nKa5K0pkFPoTQe5LhA4TCwpJHgdJLhKrhpbE9mtSOXvf+4ZEaoNrKXFMlXaNtcJQsQCQQsB1v02V/XlPT+u8mKwzEBdrPNYTC7ttETLA43zRWPIfNOmw+vkob29640Dsqkut9LD3a05rVn3IvE8DNKSx/SBHoe3gZVkR7kHBIzNDliTEvsZ5IQtUwEJ0AftvkHqPCaokDU6V3xM5i9vqy3ovizJkF2QIg==
     - GROUP=264208240070.dkr.ecr.us-east-1.amazonaws.com # {AWS account ID}.dkr.ecr.us-east-1
     - TAG=$GIT_TAG_NAME
     - IMAGE_TAG=$BRANCH.$BUILD_NUMBER
     - REPO=docker-meanio-users
+    - MONGO_HOST="mongodb://127.0.0.1/testdb"
+    - PORT=4040
+    - NODE_ENV=test
 
 build:
   ci:
-    - mongo testdb --eval 'db.addUser("user", "pass");'
+    - mongod &
     - mkdir -p shippable/codecoverage -p shippable/testresults
     - npm install
     - npm run test:coverage
