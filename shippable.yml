@@ -1,0 +1,44 @@
+language: node_js
+
+node_js:
+  - "7.6"
+
+services:
+  - mongodb
+
+env:
+  global:
+    - secure: H/Nj/b0AsKa4cLfTfvbXm1PVPDDM5egnEmx734Du8TnA6Afxgs79YCs2KaTcDOesmSybMmNavYqHtSgoB7MeGtsEnO+IhFV84wPkxoIzjfJF6YaPRl3eItfChXOFQd/hNhOzxphs49Dq5bX5SYb8Nb+9mwy36nMBVgK3JH0v06etJJIAcs+oYbV3EzhXJxi4G35cwxM5OPzGKsmRQIXt9TABo0fg3UgsD79AJV3r7sN++glFeuzsch0Jl1/aWoAkxS4xhxpPYg/a01SWZQx0EXo29C42QOd7inEFdSwGBszU1V3O/V9peqw/C7vB9QfJ4oipI/zsW40dSzuMDd0gFw==
+    - GROUP=264208240070.dkr.ecr.us-east-1.amazonaws.com # {AWS account ID}.dkr.ecr.us-east-1
+    - TAG=$GIT_TAG_NAME
+    - IMAGE_TAG=$BRANCH.$BUILD_NUMBER
+    - REPO=docker-meanio-users
+
+build:
+  ci:
+    - mongo testdb --eval 'db.addUser("user", "pass");'
+    - mkdir -p shippable/codecoverage -p shippable/testresults
+    - npm install
+    - npm run test:coverage
+
+  post_ci:
+    - cp -r coverage shippable/coverage/
+
+  on_success:
+    - ./scripts/build.sh
+    - ./scripts/push.sh
+
+integrations:
+  hub:
+    - integrationName: shippable-ecr  # must match Subscription Integration in Shippable
+      type: ecr
+      region: us-east-1
+
+  notifications:
+    - integrationName: slack-integration
+      type: slack
+      recipients:
+        - "#deployment"
+      on_start: always
+      on_success: always
+      on_failure: always
