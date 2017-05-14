@@ -12,6 +12,11 @@ if [[ -z "$COMMIT" ]] ; then
     exit 1
 fi
 
+GIT_BRANCH=$(git rev-parse --symbolic-full-name --abbrev-ref HEAD)
+GIT_TAG=$(git describe --exact-match --tags 2> /dev/null)
+echo $GIT_BRANCH
+echo $GIT_TAG
+
 push() {
     DOCKER_PUSH=1;
     while [ $DOCKER_PUSH -gt 0 ] ; do
@@ -32,19 +37,20 @@ tag_and_push_all() {
         TAG=$1
     fi
     DOCKER_REPO=${GROUP}/${REPO}
+    echo $DOCKER_REPO
+
     if [[ "$COMMIT" != "$TAG" ]]; then
         docker tag ${DOCKER_REPO}:${COMMIT} ${DOCKER_REPO}:${TAG}
     fi
     push "$DOCKER_REPO:$TAG";
 }
 
-# Push snapshot when in master
-if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
-    tag_and_push_all master-${COMMIT:0:8}
-fi;
+# Push snapshots whenever possible
+tag_and_push_all ${GIT_BRANCH}-${COMMIT:0:8}
 
 # Push tag and latest when tagged
-if [ -n "$TRAVIS_TAG" ]; then
-    tag_and_push_all ${TRAVIS_TAG}
+# if [ "$GIT_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+if [ -n "$GIT_TAG" ]; then
+    tag_and_push_all ${GIT_TAG}
     tag_and_push_all latest
 fi;

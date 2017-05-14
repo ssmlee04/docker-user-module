@@ -8,11 +8,13 @@ if [[ -z "$GROUP" ]] ; then
   echo "Cannot find GROUP env var"
   exit 1
 fi
+echo $GROUP
 
 if [[ -z "$COMMIT" ]] ; then
   echo "Cannot find COMMIT env var"
   exit 1
 fi
+echo $COMMIT
 
 if [[ "$(uname)" == "Darwin" ]]; then
   DOCKER_CMD=docker
@@ -23,6 +25,7 @@ fi
 CODE_DIR=$(cd $SCRIPT_DIR/..; pwd)
 echo $CODE_DIR
 
-REPO=${GROUP}/$(basename front-end);
+REPO=${GROUP}/$(basename docker-user-module);
+echo $REPO
 
 $DOCKER_CMD build -t ${REPO}:${COMMIT} .
