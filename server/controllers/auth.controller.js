@@ -1,13 +1,9 @@
 import jwt from 'jsonwebtoken';
-import httpStatus from 'http-status';
-import APIError from '../helpers/APIError';
+// import httpStatus from 'http-status';
+// import APIError from '../helpers/APIError';
+import _ from 'lodash';
 import config from '../../config/config';
-
-// sample user, used for authentication
-const user = {
-  username: 'react',
-  password: 'express'
-};
+import passport from './../passport';
 
 /**
  * Returns jwt token if valid username and password is provided
@@ -17,20 +13,37 @@ const user = {
  * @returns {*}
  */
 function login(req, res, next) {
-  // Ideally you'll fetch this from the db
-  // Idea here was to show how jwt works with simplicity
-  if (req.body.username === user.username && req.body.password === user.password) {
+  passport.authenticate('user', {}, (err, user, message) => {
+    if (err) {
+      return res.json(500, { error: err.toString() });
+    }
+    if (message && message.msg) {
+      return res.json(401, { error: message.msg });
+    }
+    const payload = _.omit(JSON.parse(JSON.stringify(user)), 'hashed_password', 'salt', 'emailcode');
     const token = jwt.sign({
-      username: user.username
+      _id: user._id,
+      roles: user.roles,
     }, config.jwtSecret);
-    return res.json({
-      token,
-      username: user.username
-    });
-  }
 
-  const err = new APIError('Authentication error', httpStatus.UNAUTHORIZED, true);
-  return next(err);
+    return res.send({
+      token,
+      user: payload
+    });
+  })(req, res, next);
+}
+
+/**
+ * Returns jwt token if valid username and password is provided
+ * @param req
+ * @param res
+ * @param next
+ * @returns {*}
+ */
+function loggedin(req, res) {
+  return res.json({
+    user: req.user
+  });
 }
 
 /**
@@ -47,4 +60,4 @@ function getRandomNumber(req, res) {
   });
 }
 
-export default { login, getRandomNumber };
+export default { login, loggedin, getRandomNumber };

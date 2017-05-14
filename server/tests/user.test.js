@@ -1,7 +1,9 @@
 import mongoose from 'mongoose';
 import request from 'supertest-as-promised';
 import httpStatus from 'http-status';
+import should from 'should';
 import chai, { expect } from 'chai';
+import User from '../models/user.model';
 import app from '../../index';
 
 chai.config.includeStack = true;
@@ -9,19 +11,23 @@ chai.config.includeStack = true;
 /**
  * root level hooks
  */
-after((done) => {
-  // required because https://github.com/Automattic/mongoose/issues/1251#issuecomment-65793092
-  mongoose.models = {};
-  mongoose.modelSchemas = {};
-  mongoose.connection.close();
-  done();
-});
 
 describe('## User APIs', () => {
   let user = {
-    username: 'KK123',
-    mobileNumber: '1234567890'
+    email: 'admin@gmail.com',
+    username: 'username',
+    name: 'name',
+    password: 'password',
   };
+
+  before((done) => {
+    User.remove().exec()
+    .then(() => done())
+    .catch((err) => {
+      should.not.exist(err);
+      done();
+    });
+  });
 
   describe('# POST /api/users', () => {
     it('should create a new user', (done) => {
@@ -30,12 +36,15 @@ describe('## User APIs', () => {
         .send(user)
         .expect(httpStatus.OK)
         .then((res) => {
-          expect(res.body.username).to.equal(user.username);
-          expect(res.body.mobileNumber).to.equal(user.mobileNumber);
+          res.body.username.should.equal(user.username);
+          res.body.name.should.equal(user.name);
+          should.not.exist(res.body.password);
+          should.not.exist(res.body.hashed_password);
+          should.not.exist(res.body.salt);
+          should.not.exist(res.body.emailcode);
           user = res.body;
           done();
-        })
-        .catch(done);
+        });
     });
   });
 
@@ -46,7 +55,7 @@ describe('## User APIs', () => {
         .expect(httpStatus.OK)
         .then((res) => {
           expect(res.body.username).to.equal(user.username);
-          expect(res.body.mobileNumber).to.equal(user.mobileNumber);
+          // expect(res.body.mobileNumber).to.equal(user.mobileNumber);
           done();
         })
         .catch(done);
@@ -73,7 +82,7 @@ describe('## User APIs', () => {
         .expect(httpStatus.OK)
         .then((res) => {
           expect(res.body.username).to.equal('KK');
-          expect(res.body.mobileNumber).to.equal(user.mobileNumber);
+          // expect(res.body.mobileNumber).to.equal(user.mobileNumber);
           done();
         })
         .catch(done);
@@ -112,10 +121,21 @@ describe('## User APIs', () => {
         .expect(httpStatus.OK)
         .then((res) => {
           expect(res.body.username).to.equal('KK');
-          expect(res.body.mobileNumber).to.equal(user.mobileNumber);
+          // expect(res.body.mobileNumber).to.equal(user.mobileNumber);
           done();
         })
         .catch(done);
+    });
+  });
+
+  after((done) => {
+    // required because https://github.com/Automattic/mongoose/issues/1251#issuecomment-65793092
+    User.remove().exec()
+    .then(() => {
+      mongoose.models = {};
+      mongoose.modelSchemas = {};
+      mongoose.connection.close();
+      done();
     });
   });
 });

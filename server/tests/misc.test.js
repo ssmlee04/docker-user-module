@@ -1,4 +1,5 @@
 import request from 'supertest-as-promised';
+import randomstring from 'randomstring';
 import httpStatus from 'http-status';
 import chai, { expect } from 'chai';
 import app from '../../index';
@@ -44,15 +45,29 @@ describe('## Misc', () => {
         .catch(done);
     });
 
-    it('should handle express validation error - username is required', (done) => {
+    it('should handle express validation error - email is required', (done) => {
       request(app)
         .post('/api/users')
         .send({
-          mobileNumber: '1234567890'
+          name: randomstring.generate(),
         })
         .expect(httpStatus.BAD_REQUEST)
         .then((res) => {
-          expect(res.body.message).to.equal('"username" is required');
+          expect(res.body.message).to.equal('"email" is required');
+          done();
+        })
+        .catch(done);
+    });
+
+    it('should handle express validation error - name is required', (done) => {
+      request(app)
+        .post('/api/users')
+        .send({
+          email: `${randomstring.generate()}@gmail.com`,
+        })
+        .expect(httpStatus.BAD_REQUEST)
+        .then((res) => {
+          expect(res.body.message).to.equal('"name" is required');
           done();
         })
         .catch(done);
