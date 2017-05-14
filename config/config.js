@@ -12,16 +12,20 @@ const envVarsSchema = Joi.object({
     .default(4040),
   MONGOOSE_DEBUG: Joi.boolean()
     .when('NODE_ENV', {
-      is: Joi.string().equal('development'),
-      then: Joi.boolean().default(true),
-      otherwise: Joi.boolean().default(false)
+      is: Joi.string().equal('production'),
+      then: Joi.boolean().default(false),
+      otherwise: Joi.boolean().default(true)
     }),
   JWT_SECRET: Joi.string().required()
     .description('JWT Secret required to sign'),
+  FACEBOOK_CLIENT_ID: Joi.string().required(),
+  FACEBOOK_CLIENT_SECRET: Joi.string().required(),
   MONGO_HOST: Joi.string().required()
     .description('Mongo DB host url'),
   MONGO_PORT: Joi.number()
-    .default(27017)
+    .default(27017),
+  MONGO_IF_REPLICA: Joi.boolean()
+    .default(false),
 }).unknown()
   .required();
 
@@ -35,9 +39,14 @@ const config = {
   port: envVars.PORT,
   mongooseDebug: envVars.MONGOOSE_DEBUG,
   jwtSecret: envVars.JWT_SECRET,
+  facebook: {
+    clientID: envVars.FACEBOOK_CLIENT_ID,
+    clientSecret: envVars.FACEBOOK_CLIENT_SECRET,
+  },
   mongo: {
-    host: envVars.MONGO_HOST,
-    port: envVars.MONGO_PORT
+    host: envVars.NODE_ENV === 'test' ? envVars.MONGO_HOST.replace('-dev', '-test') : envVars.MONGO_HOST,
+    port: envVars.MONGO_PORT,
+    ifOptions: envVars.MONGO_IF_REPLICA,
   }
 };
 
