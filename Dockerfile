@@ -1,7 +1,7 @@
 # take default image of node boron i.e  node 6.x
-FROM node:6.10.1
+FROM node:7.6
 
-MAINTAINER Kunal Kapadia <kunalkapadia12@gmail.com>
+MAINTAINER Shih-Min Lee <ssmlee04@gmail.com>
 
 # create app directory in container
 RUN mkdir -p /app
@@ -15,7 +15,7 @@ WORKDIR /app
 
 # use changes to package.json to force Docker not to use the cache
 # when we change our application's nodejs dependencies:
-ADD package.json yarn.lock /tmp/package.json
+ADD package.json yarn.lock /tmp/
 RUN cd /tmp && npm install
 RUN mkdir -p /app && cp -a /tmp/node_modules /app/
 
