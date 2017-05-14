@@ -123,4 +123,4 @@ describe('## Auth APIs', () => {
       done();
     });
   });
-});
+}).timeout(2000);
