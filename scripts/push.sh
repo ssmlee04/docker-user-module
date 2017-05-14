@@ -51,8 +51,10 @@ BRANCH_TRIMMED=${BRANCH//[\/]/-}
 tag_and_push_all ${BRANCH_TRIMMED}-${COMMIT:0:8}
 
 # Push tag and latest when tagged
-# if [ "$BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
 if [ -n "$GIT_TAG_NAME" ]; then
     tag_and_push_all ${GIT_TAG_NAME}
+elif [ "$BRANCH" == "develop" ]; then
+    tag_and_push_all latest_dev
+elif [ "$BRANCH" == "master" ]; then
     tag_and_push_all latest
 fi;
