@@ -22,7 +22,7 @@ if (config.env === 'development') {
   winston.stream = {
     write: (message, encoding) => { // eslint-disable-line no-unused-vars
       winston.info(message);
-    }
+    },
   };
 
   app.use(logger('dev', { stream: winston.stream }));
@@ -84,7 +84,7 @@ app.use((req, res, next) => {
 // log error in winston transports except when executing test suite
 if (config.env !== 'test') {
   app.use(expressWinston.errorLogger({
-    winstonInstance
+    winstonInstance,
   }));
 }
 
@@ -92,7 +92,7 @@ if (config.env !== 'test') {
 app.use((err, req, res, next) => // eslint-disable-line no-unused-vars
   res.status(err.status).json({
     message: err.isPublic ? err.message : httpStatus[err.status],
-    stack: config.env === 'development' ? err.stack : {}
+    stack: config.env === 'development' ? err.stack : {},
   })
 );
 

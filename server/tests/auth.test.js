@@ -31,38 +31,38 @@ const invalidUserCredentials = {
 describe('## Auth APIs', () => {
   let jwtToken;
 
-  before((done) => {
+  before(done => {
     User.remove().exec()
     .then(() => User.insert(validUserCredentials))
-    .then((d) => {
+    .then(d => {
       savedValidUser = JSON.parse(JSON.stringify(d));
     })
     .then(() => User.verify(savedValidUser._id))
     .then(() => done())
-    .catch((err) => {
+    .catch(err => {
       should.not.exist(err);
       done();
     });
   });
 
   describe('# POST /api/auth/login', () => {
-    it('should return Authentication error', (done) => {
+    it('should return Authentication error', done => {
       request(app)
         .post('/api/auth/login')
         .send(invalidUserCredentials)
         .expect(httpStatus.UNAUTHORIZED)
-        .then((res) => {
+        .then(res => {
           expect(res.body.error).to.equal('text-invalid-password');
           done();
         });
     });
 
-    it('should get valid JWT token', (done) => {
+    it('should get valid JWT token', done => {
       request(app)
         .post('/api/auth/login')
         .send(validUserCredentials)
         .expect(httpStatus.OK)
-        .then((res) => {
+        .then(res => {
           expect(res.body).to.have.property('token');
           jwt.verify(res.body.token, config.jwtSecret, (err, decoded) => {
             should.not.exist(err); // eslint-disable-line no-unused-expressions
@@ -77,35 +77,35 @@ describe('## Auth APIs', () => {
   });
 
   describe('# GET /api/auth/random-number', () => {
-    it('should fail to get random number because of missing Authorization', (done) => {
+    it('should fail to get random number because of missing Authorization', done => {
       request(app)
         .get('/api/auth/random-number')
         .expect(httpStatus.UNAUTHORIZED)
-        .then((res) => {
+        .then(res => {
           expect(res.body.message).to.equal('Unauthorized');
           done();
         })
         .catch(done);
     });
 
-    it('should fail to get random number because of wrong token', (done) => {
+    it('should fail to get random number because of wrong token', done => {
       request(app)
         .get('/api/auth/random-number')
         .set('Authorization', 'Bearer inValidToken')
         .expect(httpStatus.UNAUTHORIZED)
-        .then((res) => {
+        .then(res => {
           expect(res.body.message).to.equal('Unauthorized');
           done();
         })
         .catch(done);
     });
 
-    it('should get a random number', (done) => {
+    it('should get a random number', done => {
       request(app)
         .get('/api/auth/random-number')
         .set('Authorization', jwtToken)
         .expect(httpStatus.OK)
-        .then((res) => {
+        .then(res => {
           expect(res.body.num).to.be.a('number');
           done();
         })
@@ -113,7 +113,7 @@ describe('## Auth APIs', () => {
     });
   });
 
-  after((done) => {
+  after(done => {
     // required because https://github.com/Automattic/mongoose/issues/1251#issuecomment-65793092
     User.remove().exec()
     .then(() => {

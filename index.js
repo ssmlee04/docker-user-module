@@ -1,3 +1,5 @@
+/* @flow */
+
 import mongoose from 'mongoose';
 
 // config should be imported before importing any other file
@@ -7,7 +9,7 @@ import app from './config/express';
 // const debug = require('debug')('express-mongoose-es6-rest-api:index');
 
 // make bluebird default Promise
-Promise = require('bluebird'); // eslint-disable-line no-global-assign
+Promise = require('bluebird'); // eslint-disable-line no-undef
 
 // plugin bluebird promise in mongoose
 mongoose.Promise = Promise;

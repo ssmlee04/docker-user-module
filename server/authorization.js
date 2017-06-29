@@ -4,7 +4,7 @@
 exports.requiresLogin = (req, res, next) => {
   if (!req.isAuthenticated()) {
     return res.json(401, {
-      error: 'text-error-user-unauthorized'
+      error: 'text-error-user-unauthorized',
     });
   }
   return next();
@@ -17,7 +17,7 @@ exports.requiresLogin = (req, res, next) => {
 exports.requiresAdmin = (req, res, next) => {
   if (!req.isAuthenticated() || !(req.user.hasRole('admin') || req.user.hasRole('root'))) {
     return res.json(401, {
-      error: 'text-error-user-not-admin'
+      error: 'text-error-user-not-admin',
     });
   }
   return next();
@@ -30,7 +30,7 @@ exports.requiresAdmin = (req, res, next) => {
 exports.requiresRootAdmin = (req, res, next) => {
   if (!req.isAuthenticated() || !req.user.hasRole('root')) {
     return res.json(401, {
-      error: 'text-error-user-not-root'
+      error: 'text-error-user-not-root',
     });
   }
   return next();

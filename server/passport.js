@@ -15,9 +15,9 @@ module.exports = (() => {
   // which is the user id
   passport.deserializeUser((id, done) => {
     User.findOne({ _id: id }, '-salt -hashed_password').exec()
-    .then((d) => {
+    .then(d => {
       done(null, d);
-    }).catch((err) => {
+    }).catch(err => {
       done(err, null);
     });
   });
@@ -26,31 +26,31 @@ module.exports = (() => {
   passport.use('user', new LocalStrategy({
     usernameField: 'email',
     passwordField: 'password',
-    passReqToCallback: true
+    passReqToCallback: true,
   },
   (req, email, password, done) => {
     User.findOne({
       $or: [{ email }, { username: email }],
       roles: {
-        $in: ['user']
-      }
+        $in: ['user'],
+      },
     }, (err, user) => {
       if (err) {
         return done(err);
       }
       if (!user) {
         return done(null, false, {
-          msg: 'text-unknown-user'
+          msg: 'text-unknown-user',
         });
       }
       if (!user.authenticate(password)) {
         return done(null, false, {
-          msg: 'text-invalid-password'
+          msg: 'text-invalid-password',
         });
       }
       if (!user.verified) {
         return done(null, false, {
-          msg: 'text-error-email-not-verified'
+          msg: 'text-error-email-not-verified',
         });
       }
       return done(null, user);
@@ -60,7 +60,7 @@ module.exports = (() => {
   passport.use('facebook-token', new FacebookTokenStrategy({
     clientID: config.facebook.clientID,
     clientSecret: config.facebook.clientSecret,
-    passReqToCallback: true
+    passReqToCallback: true,
   },
   (req, accessToken, refreshToken, profile, done) => {
     User.findOne({ 'facebook.id': profile.id }, (err, info) => {
@@ -78,9 +78,9 @@ module.exports = (() => {
         facebook: profile._json,
         roles: ['authenticated'],
         image: profile.photos && profile.photos[0].value,
-        avatar: profile.photos && profile.photos[0].value
+        avatar: profile.photos && profile.photos[0].value,
       });
-      return user.save((error) => {
+      return user.save(error => {
         if (error) {
           done(null, false, { message: 'text-error-facebook-login' });
         } else {
