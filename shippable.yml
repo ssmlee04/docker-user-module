@@ -27,6 +27,8 @@ build:
     - cp -r coverage shippable/coverage/
 
   on_success:
+    - chmod +x ./scripts/build.sh
+    - chmod +x ./scripts/push.sh
     - ./scripts/build.sh
     - ./scripts/push.sh
 
