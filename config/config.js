@@ -14,7 +14,7 @@ const envVarsSchema = Joi.object({
     .when('NODE_ENV', {
       is: Joi.string().equal('production'),
       then: Joi.boolean().default(false),
-      otherwise: Joi.boolean().default(true)
+      otherwise: Joi.boolean().default(true),
     }),
   JWT_SECRET: Joi.string().required()
     .description('JWT Secret required to sign'),
@@ -47,7 +47,7 @@ const config = {
     host: envVars.NODE_ENV === 'test' ? envVars.MONGO_HOST.replace('-dev', '-test') : envVars.MONGO_HOST,
     port: envVars.MONGO_PORT,
     ifOptions: envVars.MONGO_IF_REPLICA,
-  }
+  },
 };
 
 export default config;

@@ -1,3 +1,5 @@
+// @flow
+
 import User from '../models/user.model';
 
 /**
@@ -5,7 +7,7 @@ import User from '../models/user.model';
  */
 function load(req, res, next, id) {
   User.get(id)
-    .then((user) => {
+    .then(user => {
       req.user = user; // eslint-disable-line no-param-reassign
       return next();
     })

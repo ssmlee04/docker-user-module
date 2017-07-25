@@ -1,52 +1,43 @@
 {
-  "rules": {
-    "no-param-reassign": 0,
-    "consistent-return": 0,
-    "indent": [
-      2,
-      2,
-      {
-        "SwitchCase": 1
-      }
-    ],
-    "space-before-function-paren": [
-      2,
-      {
-        "anonymous": "always",
-        "named": "never"
-      }
-    ],
-    "no-use-before-define": [
-      2,
-      "nofunc"
-    ],
-    // TODO: turn on later
-    "comma-dangle": [
-      0
-    ],
-    "import/no-extraneous-dependencies": [
-      "error",
-      {
-        "devDependencies": true
-      }
-    ],
-    "no-underscore-dangle": [
-      0
-    ]
+  "parser": "babel-eslint",
+  "plugins": [
+    "react"
+  ],
+  "ecmaFeatures": {
+    "jsx": true,
+    "modules": true
   },
   "env": {
-    "node": true,
-    "mocha": true
+    "browser": true,
+    "amd": true,
+    "es6": true,
+    "node": true
   },
-  "parserOptions": {
-    "ecmaVersion": 6,
-    "sourceType": "module"
+  "rules": {
+    "comma-dangle": [ 1, "always-multiline" ],
+    "quotes": [ 1, "single" ],
+    "no-undef": 1,
+    "global-strict": 0,
+    "semi": 1,
+    "no-extra-semi": 1,
+    "no-underscore-dangle": 0,
+    "no-console": 0,
+    "no-unused-vars": 1,
+    "no-trailing-spaces": [1, { "skipBlankLines": true }],
+    "no-unreachable": 1,
+    "no-alert": 0,
+    "react/jsx-uses-react": 1,
+    "arrow-parens": [2, "as-needed"]
   },
-  "globals": {
-    "should": true,
-  },
-  "extends": [
-    "eslint:recommended",
-    "airbnb-base"
-  ]
+  "globals":{
+    "it": true,
+    "describe": true,
+    "expect": true,
+    "assert": true,
+    "sinon": true,
+    "before": true,
+    "beforeEach": true,
+    "after": true,
+    "afterEach": true
+  }
 }

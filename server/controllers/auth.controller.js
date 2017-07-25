@@ -1,3 +1,5 @@
+// @flow
+
 import jwt from 'jsonwebtoken';
 // import httpStatus from 'http-status';
 // import APIError from '../helpers/APIError';
@@ -28,7 +30,7 @@ function login(req, res, next) {
 
     return res.send({
       token,
-      user: payload
+      user: payload,
     });
   })(req, res, next);
 }
@@ -42,7 +44,7 @@ function login(req, res, next) {
  */
 function loggedin(req, res) {
   return res.json({
-    user: req.user
+    user: req.user,
   });
 }
 
@@ -56,7 +58,7 @@ function getRandomNumber(req, res) {
   // req.user is assigned by jwt middleware if valid token is provided
   return res.json({
     user: req.user,
-    num: Math.random() * 100
+    num: Math.random() * 100,
   });
 }
 

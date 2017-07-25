@@ -7,7 +7,7 @@ export default {
       username: Joi.string(),
       name: Joi.string().required(),
       password: Joi.string().regex(/^[a-zA-Z0-9]{8,30}$/),
-    }
+    },
   },
 
   updateUser: {
@@ -23,7 +23,7 @@ export default {
   login: {
     body: {
       email: Joi.string().required(),
-      password: Joi.string().required()
-    }
-  }
+      password: Joi.string().required(),
+    },
+  },
 };

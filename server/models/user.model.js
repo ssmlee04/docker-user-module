@@ -1,3 +1,5 @@
+// @flow
+
 import Promise from 'bluebird';
 import mongoose from 'mongoose';
 import httpStatus from 'http-status';
@@ -57,7 +59,7 @@ const UserSchema = new mongoose.Schema({
     type: Date,
   },
   roles: { // everyone is a user, admin would have both the admin and the user role
-    type: Array, default: ['user']
+    type: Array, default: ['user'],
   },
   resetPasswordToken: String,
   resetPasswordExpires: Date,
@@ -69,7 +71,7 @@ const UserSchema = new mongoose.Schema({
   },
 }, {
   collection: 'db_users',
-  timestamps: true
+  timestamps: true,
 });
 
 // UserSchema.index({ username: 1 });
@@ -145,7 +147,7 @@ UserSchema.methods = {
     if (!password || !this.salt) return '';
     const salt = new Buffer(this.salt, 'base64');
     return crypto.pbkdf2Sync(password, salt, 10000, 64).toString('base64');
-  }
+  },
 };
 
 /**
@@ -160,7 +162,7 @@ UserSchema.statics = {
   get(id) {
     return this.findById(id)
       .exec()
-      .then((user) => {
+      .then(user => {
         if (user) {
           return user;
         }
@@ -226,7 +228,7 @@ UserSchema.statics = {
     }
 
     return this.__createProfile(info)
-    .then((d) => {
+    .then(d => {
       user = JSON.parse(JSON.stringify(d));
     })
     .then(() => {

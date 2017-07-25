@@ -1,3 +1,5 @@
+// @flow
+
 import gulp from 'gulp';
 import gulpLoadPlugins from 'gulp-load-plugins';
 import path from 'path';
@@ -9,7 +11,7 @@ const plugins = gulpLoadPlugins();
 const paths = {
   js: ['./**/*.js', '!dist/**', '!node_modules/**', '!coverage/**'],
   nonJs: ['./package.json', './.gitignore', './.env'],
-  tests: './server/tests/*.js'
+  tests: './server/tests/*.js',
 };
 
 // Clean up dist and coverage directory
@@ -34,7 +36,7 @@ gulp.task('babel', () =>
       includeContent: false,
       sourceRoot(file) {
         return path.relative(file.path, __dirname);
-      }
+      },
     }))
     .pipe(gulp.dest('dist'))
 );
@@ -45,7 +47,7 @@ gulp.task('nodemon', ['copy', 'babel'], () =>
     script: path.join('dist', 'index.js'),
     ext: 'js',
     ignore: ['node_modules/**/*.js', 'dist/**/*.js'],
-    tasks: ['copy', 'babel']
+    tasks: ['copy', 'babel'],
   })
 );
 
