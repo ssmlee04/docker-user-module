@@ -60,7 +60,7 @@
     "jsonwebtoken": "7.4.1",
     "lodash": "^4.17.4",
     "method-override": "^2.3.5",
-    "mongoose": "4.11.4",
+    "mongoose": "4.11.5",
     "morgan": "1.8.2",
     "passport": "^0.3.2",
     "passport-facebook-token": "^3.3.0",
