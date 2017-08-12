@@ -62,7 +62,7 @@
     "method-override": "^2.3.5",
     "mongoose": "4.11.5",
     "morgan": "1.8.2",
-    "passport": "^0.3.2",
+    "passport": "^0.4.0",
     "passport-facebook-token": "^3.3.0",
     "passport-local": "^1.0.0",
     "randomstring": "^1.1.5",
